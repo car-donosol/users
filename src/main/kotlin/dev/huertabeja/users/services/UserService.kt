@@ -19,7 +19,7 @@ class UserService(private val repository: UserRepository) {
     }
 
     suspend fun loginUser(loginRequest: LoginRequest): LoginResponse {
-        val user = repository.loginUser(loginRequest.user, loginRequest.password)
+        val user = repository.loginUser(loginRequest.email, loginRequest.password)
         
         return if (user != null) {
             LoginResponse(

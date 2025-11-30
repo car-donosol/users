@@ -13,33 +13,33 @@ class UserRepository(private val supabase: SupabaseClient) {
 
     suspend fun getUsersFromSupabase(): List<User> {
         return try {
-            val response = supabase.from("Users").select()
+            val response = supabase.from("Clientes").select()
 
             response.decodeList<User>()
         } catch (e: Exception) {
-            println("Error al obtener usuarios de Supabase: ${e.message}")
+            println("Error al obtener clientes de Supabase: ${e.message}")
             throw e
         }
     }
 
     suspend fun createUser(user: UserRequest): User {
         return try {
-            val response = supabase.from("Users").insert(user) {
+            val response = supabase.from("Clientes").insert(user) {
                 select()
             }
             response.decodeSingle<User>()
         } catch (e: Exception) {
-            println("Error al crear usuario en Supabase: ${e.message}")
+            println("Error al crear cliente en Supabase: ${e.message}")
             throw e
         }
     }
 
     suspend fun loginUser(email: String, password: String): User? {
         return try {
-            val response = supabase.from("Users")
+            val response = supabase.from("Clientes")
                 .select {
                     filter {
-                        eq("user", email)
+                        eq("email", email)
                         eq("password", password)
                     }
                 }
