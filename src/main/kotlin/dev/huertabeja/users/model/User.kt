@@ -18,6 +18,6 @@ data class User(
     val apmaterno: String,  // Apellido materno
     val email: String,
     val telefono: Int,
-    val fechareg: String,  // Fecha de registro en formato "YYYY-MM-DD"
+    val fechareg: String?,  // Fecha de registro en formato "YYYY-MM-DD" (puede ser null)
     val password: String
 )
