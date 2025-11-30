@@ -52,4 +52,38 @@ class UserRepository(private val supabase: SupabaseClient) {
         }
     }
 
+    suspend fun findByRun(run: Int): User? {
+        return try {
+            val response = supabase.from("Clientes")
+                .select {
+                    filter {
+                        eq("run", run)
+                    }
+                }
+            
+            val users = response.decodeList<User>()
+            users.firstOrNull()
+        } catch (e: Exception) {
+            println("Error al buscar cliente por RUN en Supabase: ${e.message}")
+            null
+        }
+    }
+
+    suspend fun findByEmail(email: String): User? {
+        return try {
+            val response = supabase.from("Clientes")
+                .select {
+                    filter {
+                        eq("email", email)
+                    }
+                }
+            
+            val users = response.decodeList<User>()
+            users.firstOrNull()
+        } catch (e: Exception) {
+            println("Error al buscar cliente por email en Supabase: ${e.message}")
+            null
+        }
+    }
+
 }

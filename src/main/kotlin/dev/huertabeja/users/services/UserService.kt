@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service
 import dev.huertabeja.users.model.UserRequest
 import dev.huertabeja.users.model.LoginRequest
 import dev.huertabeja.users.model.LoginResponse
+import dev.huertabeja.users.exception.UserAlreadyExistsException
 
 @Service
 class UserService(private val repository: UserRepository) {
@@ -15,6 +16,20 @@ class UserService(private val repository: UserRepository) {
     }
 
     suspend fun createUser(user: UserRequest): User {
+        // Verificar si el RUT ya existe
+        val existingUserByRun = repository.findByRun(user.run)
+        
+        if (existingUserByRun != null) {
+            throw UserAlreadyExistsException("Usuario con RUN ${user.run}-${user.dv} ya existe en el sistema")
+        }
+        
+        // Verificar si el email ya existe
+        val existingUserByEmail = repository.findByEmail(user.email)
+        
+        if (existingUserByEmail != null) {
+            throw UserAlreadyExistsException("El email ${user.email} ya está registrado en el sistema")
+        }
+        
         return repository.createUser(user)
     }
 
