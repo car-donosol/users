@@ -15,6 +15,10 @@ class UserService(private val repository: UserRepository) {
         return repository.getUsersFromSupabase()
     }
 
+    suspend fun getUserById(id: String): User? {
+        return repository.getUserById(id)
+    }
+
     suspend fun createUser(user: UserRequest): User {
         // Verificar si el RUT ya existe
         val existingUserByRun = repository.findByRun(user.run)

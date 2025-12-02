@@ -22,6 +22,23 @@ class UserRepository(private val supabase: SupabaseClient) {
         }
     }
 
+    suspend fun getUserById(id: String): User? {
+        return try {
+            val response = supabase.from("Clientes")
+                .select {
+                    filter {
+                        eq("id", id)
+                    }
+                }
+            
+            val users = response.decodeList<User>()
+            users.firstOrNull()
+        } catch (e: Exception) {
+            println("Error al buscar cliente por ID en Supabase: ${e.message}")
+            null
+        }
+    }
+
     suspend fun createUser(user: UserRequest): User {
         return try {
             val response = supabase.from("Clientes").insert(user) {

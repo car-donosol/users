@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.PathVariable
 import dev.huertabeja.users.model.UserRequest
 import dev.huertabeja.users.model.LoginRequest
 import dev.huertabeja.users.model.LoginResponse
@@ -22,6 +23,12 @@ class UserControllers(
     @GetMapping
     suspend fun getUsers(): List<User> {
         return service.getUsers()
+    }
+
+    // Cuando se haga una petición GET a /users/{id}, se ejecutará esta función
+    @GetMapping("/{id}")
+    suspend fun getUserById(@PathVariable id: String): User? {
+        return service.getUserById(id)
     }
 
     // Cuando se haga una petición POST a /users, se ejecutará esta función
