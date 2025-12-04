@@ -1,7 +1,7 @@
 package dev.huertabeja.users.data
 
 import dev.huertabeja.users.model.User
-import dev.huertabeja.users.model.UserRequest
+import dev.huertabeja.users.model.UserRequestInternal
 import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
@@ -39,7 +39,7 @@ class UserRepository(private val supabase: SupabaseClient) {
         }
     }
 
-    suspend fun createUser(user: UserRequest): User {
+    suspend fun createUser(user: UserRequestInternal): User {
         return try {
             val response = supabase.from("Clientes").insert(user) {
                 select()

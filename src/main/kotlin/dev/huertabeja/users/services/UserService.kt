@@ -4,6 +4,7 @@ import dev.huertabeja.users.data.UserRepository
 import dev.huertabeja.users.model.User
 import org.springframework.stereotype.Service
 import dev.huertabeja.users.model.UserRequest
+import dev.huertabeja.users.model.UserRequestInternal
 import dev.huertabeja.users.model.LoginRequest
 import dev.huertabeja.users.model.LoginResponse
 import dev.huertabeja.users.exception.UserAlreadyExistsException
@@ -34,7 +35,30 @@ class UserService(private val repository: UserRepository) {
             throw UserAlreadyExistsException("El email ${user.email} ya está registrado en el sistema")
         }
         
-        return repository.createUser(user)
+        // Lógica de negocio: Separar nombres
+        val nombresList = user.nombres.trim().split("\\s+".toRegex())
+        val primerNombre = nombresList.getOrNull(0)?.trim() ?: ""
+        val segundoNombre = nombresList.getOrNull(1)?.trim()
+        
+        // Lógica de negocio: Separar apellidos
+        val apellidosList = user.apellidos.trim().split("\\s+".toRegex())
+        val apellidoPaterno = apellidosList.getOrNull(0)?.trim() ?: ""
+        val apellidoMaterno = apellidosList.getOrNull(1)?.trim()
+        
+        // Crear objeto interno con campos separados
+        val userInternal = UserRequestInternal(
+            run = user.run,
+            dv = user.dv,
+            pnombre = primerNombre,
+            snombre = segundoNombre,
+            appaterno = apellidoPaterno,
+            apmaterno = apellidoMaterno,
+            email = user.email,
+            telefono = user.telefono,
+            password = user.password
+        )
+        
+        return repository.createUser(userInternal)
     }
 
     suspend fun loginUser(loginRequest: LoginRequest): LoginResponse {
